@@ -50,4 +50,8 @@ class ProductsViewModel @Inject constructor(
         }
 
     }
+
+    fun retry() {
+        loadProducts()
+    }
 }

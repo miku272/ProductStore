@@ -21,12 +21,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
+import com.example.myapplication.core.common.CurrencyFormatter
+import com.example.myapplication.core.composables.NetworkImage
 import com.example.myapplication.core.designsystem.AppElevation
 import com.example.myapplication.core.designsystem.AppShapes
 import com.example.myapplication.core.designsystem.Dimens
 import com.example.myapplication.features.products.domain.models.Product
+import com.example.myapplication.features.products.domain.models.Rating
 
 @Composable
 fun ProductsCard(
@@ -46,11 +55,12 @@ fun ProductsCard(
             modifier = Modifier.padding(Dimens.Spacing.Medium),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
+            NetworkImage(
+                imageUrl = product.image,
+                contentDescription = product.title,
                 modifier = Modifier
                     .size(Dimens.Size.ProductImage)
-                    .clip(AppShapes.Medium)
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .clip(AppShapes.Medium),
             )
 
             Spacer(
@@ -118,11 +128,30 @@ fun ProductsCard(
                 )
 
                 Text(
-                    text = "£${product.price}",
+                    text = CurrencyFormatter.format(product.price),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ProductsCardPreview() {
+    ProductsCard(
+        product = Product(
+            id = 1,
+            title = "Test Product",
+            price = 23.98,
+            category = "Test Category",
+            image = "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
+            rating = Rating(
+                rate = 4.5,
+                count = 10
+            )
+        ),
+        onClick = {}
+    )
 }
