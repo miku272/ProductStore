@@ -1,5 +1,6 @@
 package com.example.myapplication.features.products.presentation
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +22,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.myapplication.features.products.presentation.state.ProductsViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.TextStyle
+import com.example.myapplication.core.designsystem.Dimens
+import com.example.myapplication.features.products.presentation.composables.ProductsCard
 import com.example.myapplication.features.products.presentation.composables.ProductsTopBar
 import com.example.myapplication.features.products.presentation.state.ProductUiState
 
@@ -37,6 +40,7 @@ fun ProductsScreen(
         Box(
             modifier = Modifier
                 .padding(innerPadding)
+                .padding(horizontal = Dimens.Spacing.Medium)
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
 
@@ -46,22 +50,11 @@ fun ProductsScreen(
 
                 is ProductUiState.Success -> {
                     LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(Dimens.Spacing.Medium),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         items((state as ProductUiState.Success).products) { product ->
-                            Row(
-
-                            ) {
-                                Text(
-                                    text = product.title,
-                                )
-
-                                Spacer(modifier = Modifier.width(16.dp))
-
-                                Button(onClick = { onProductClick(product.id) }) {
-                                    Text("Go to Details")
-                                }
-                            }
+                            ProductsCard(product = product, onClick = { })
                         }
                     }
                 }
