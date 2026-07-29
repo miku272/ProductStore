@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun ProductsTopBar(modifier: Modifier = Modifier) {
     TopAppBar(
+        modifier = modifier,
         title = { Text("Products") },
         actions = {
             IconButton(onClick = { }) {
