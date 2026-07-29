@@ -21,6 +21,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.myapplication.features.products.presentation.state.ProductsViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.TextStyle
+import com.example.myapplication.features.products.presentation.composables.ProductsTopBar
 import com.example.myapplication.features.products.presentation.state.ProductUiState
 
 @Composable
@@ -30,7 +31,9 @@ fun ProductsScreen(
     val viewModel: ProductsViewModel = hiltViewModel()
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    Scaffold { innerPadding ->
+    Scaffold(
+        topBar = { ProductsTopBar() }
+    ) { innerPadding ->
         Box(
             modifier = Modifier
                 .padding(innerPadding)
