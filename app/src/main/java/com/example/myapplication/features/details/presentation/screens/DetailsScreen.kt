@@ -12,17 +12,17 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun DetailsScreen(modifier: Modifier = Modifier) {
+fun DetailsScreen(productId: String) {
     Scaffold { innerPadding ->
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
 
         ) {
             Text(
-                text = "Details Screen",
+                text = "Details Screen for product: $productId",
                 style = TextStyle(
                     fontSize = 24.sp
                 )

@@ -12,10 +12,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun FavoritesScreen(modifier: Modifier = Modifier) {
+fun FavoritesScreen() {
     Scaffold { innerPadding ->
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
