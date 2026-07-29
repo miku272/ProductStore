@@ -15,7 +15,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.myapplication"
+        applicationId = "me.naresh.productstore"
         minSdk = 24
         targetSdk = 37
         versionCode = 1
