@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.myapplication.features.details.presentation.screens.DetailsScreen
 import com.example.myapplication.features.favorites.presentation.screens.FavoritesScreen
-import com.example.myapplication.features.products.presentation.screens.ProductsScreen
+import com.example.myapplication.features.products.presentation.ProductsScreen
 import com.example.myapplication.features.settings.presentation.screens.SettingsScreen
 
 @Composable

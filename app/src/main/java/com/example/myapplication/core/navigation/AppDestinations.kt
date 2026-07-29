@@ -7,7 +7,7 @@ object Products
 
 @Serializable
 data class Details(
-    val productId: String
+    val productId: Int
 )
 
 @Serializable

@@ -12,7 +12,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun DetailsScreen(productId: String) {
+fun DetailsScreen(productId: Int) {
     Scaffold { innerPadding ->
         Box(
             modifier = Modifier
