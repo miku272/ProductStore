@@ -3,6 +3,7 @@ package com.example.myapplication.features.products.presentation.state
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.core.common.Result
+import com.example.myapplication.core.common.models.Product
 import com.example.myapplication.core.common.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -15,43 +16,107 @@ import kotlinx.coroutines.launch
 class ProductsViewModel @Inject constructor(
     private val productRepository: ProductRepository
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow<ProductUiState>(ProductUiState.Loading)
+    private val _uiState = MutableStateFlow<ProductUiState>(ProductUiState())
     val uiState = _uiState.asStateFlow()
 
     init {
-        loadProducts()
+        initialLoad()
     }
 
-    private fun loadProducts() {
+    fun refresh() {
+        refreshProducts()
+    }
+
+    private fun initialLoad() {
+
         viewModelScope.launch {
-            _uiState.update {
-                ProductUiState.Loading
+
+            showInitialLoading()
+
+            fetchProducts()
+        }
+    }
+
+    private fun refreshProducts() {
+
+        viewModelScope.launch {
+
+            showRefreshing()
+
+            fetchProducts()
+        }
+    }
+
+    private suspend fun fetchProducts() {
+
+        val result = productRepository
+            .getProducts()
+
+        when (result) {
+            is Result.Loading -> { }
+
+            is Result.Success -> {
+                showProducts(result.data)
             }
 
-            when (val result = productRepository.getProducts()) {
-                is Result.Loading -> {
-                    _uiState.update {
-                        ProductUiState.Loading
-                    }
-                }
-
-                is Result.Success -> {
-                    _uiState.update {
-                        ProductUiState.Success(products = result.data)
-                    }
-                }
-
-                is Result.Error -> {
-                    _uiState.update {
-                        ProductUiState.Error(message = result.message)
-                    }
-                }
+            is Result.Error -> {
+                showError()
             }
         }
 
     }
 
-    fun retry() {
-        loadProducts()
+    private fun showInitialLoading() {
+
+        _uiState.update {
+
+            it.copy(
+                isInitialLoading = true,
+                isRefreshing = false,
+                error = null
+            )
+
+        }
+    }
+
+    private fun showRefreshing() {
+
+        _uiState.update {
+
+            it.copy(
+                isRefreshing = true,
+                error = null
+            )
+
+        }
+    }
+
+    private fun showProducts(
+        products: List<Product>
+    ) {
+
+        _uiState.update {
+
+            it.copy(
+                products = products,
+                isInitialLoading = false,
+                isRefreshing = false,
+                error = null
+            )
+
+        }
+    }
+
+    private fun showError() {
+
+        _uiState.update {
+
+            it.copy(
+                isInitialLoading = false,
+                isRefreshing = false,
+                error = "Something went wrong."
+            )
+
+        }
     }
 }

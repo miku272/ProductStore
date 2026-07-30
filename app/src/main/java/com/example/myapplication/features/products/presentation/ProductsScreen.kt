@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,9 +16,11 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.myapplication.features.products.presentation.state.ProductsViewModel
 import androidx.compose.runtime.getValue
+import com.example.myapplication.core.composables.EmptyView
 import com.example.myapplication.core.designsystem.Dimens
 import com.example.myapplication.core.composables.ErrorView
 import com.example.myapplication.features.products.presentation.composables.ProductsCard
+import com.example.myapplication.features.products.presentation.composables.ProductsList
 import com.example.myapplication.features.products.presentation.composables.ProductsTopBar
 import com.example.myapplication.features.products.presentation.state.ProductUiState
 
@@ -39,27 +42,35 @@ fun ProductsScreen(
             contentAlignment = Alignment.Center
 
         ) {
-            when (state) {
-                is ProductUiState.Loading -> CircularProgressIndicator()
+            when {
+                state.isInitialLoading -> CircularProgressIndicator()
 
-                is ProductUiState.Success -> {
-                    LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(Dimens.Spacing.Medium),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        items((state as ProductUiState.Success).products) { product ->
-                            ProductsCard(
-                                product = product,
-                                onClick = { onProductClick(product.id) })
-                        }
-                    }
+                state.error != null && state.products.isEmpty() -> {
+                    ErrorView(
+                        message = state.error!!,
+                        onRetry = viewModel::refresh
+                    )
                 }
 
-                is ProductUiState.Error -> {
-                    ErrorView(
-                        message = (state as ProductUiState.Error).message,
-                        onRetry = viewModel::retry
-                    )
+                else -> {
+                    PullToRefreshBox(
+                        isRefreshing = state.isRefreshing,
+                        onRefresh = viewModel::refresh,
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        if (state.products.isEmpty()) {
+                            EmptyView(
+                                onAction = viewModel::refresh,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        } else {
+                            ProductsList(
+                                products = state.products,
+                                onProductClick = onProductClick
+                            )
+                        }
+                    }
                 }
             }
         }
