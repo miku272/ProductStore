@@ -12,7 +12,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.example.myapplication.core.common.Result
+import dagger.hilt.android.lifecycle.HiltViewModel
 
+@HiltViewModel
 class DetailViewModel @Inject constructor(
     private val productRepository: ProductRepository,
     savedStateHandle: SavedStateHandle

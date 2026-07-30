@@ -138,6 +138,7 @@ fun ProductsCardPreview() {
             id = 1,
             title = "Test Product",
             price = 23.98,
+            description = "Test Description",
             category = "Test Category",
             image = "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
             rating = Rating(

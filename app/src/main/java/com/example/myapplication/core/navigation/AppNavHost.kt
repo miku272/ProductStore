@@ -25,11 +25,8 @@ fun AppNavHost(
                 }
             )
         }
-        composable<Details> { backStackEntry ->
-            val args = backStackEntry.toRoute<Details>()
-
+        composable<Details> {
             DetailsScreen(
-                productId = args.productId,
                 onBackClick = {
                     navController.popBackStack()
                 }

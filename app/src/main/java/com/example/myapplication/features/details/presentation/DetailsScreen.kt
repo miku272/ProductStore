@@ -6,51 +6,81 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.myapplication.core.composables.ErrorView
 import com.example.myapplication.core.designsystem.Dimens
 import com.example.myapplication.features.details.presentation.composables.DescriptionSection
 import com.example.myapplication.features.details.presentation.composables.DetailsTopBar
 import com.example.myapplication.features.details.presentation.composables.PriceSection
 import com.example.myapplication.features.details.presentation.composables.ProductHeader
 import com.example.myapplication.features.details.presentation.composables.ProductImage
+import com.example.myapplication.features.details.presentation.state.DetailState
+import com.example.myapplication.features.details.presentation.state.DetailViewModel
 
 @Composable
-fun DetailsScreen(productId: Int, onBackClick: () -> Unit, modifier: Modifier = Modifier) {
+fun DetailsScreen(
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: DetailViewModel = hiltViewModel()
+) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
     Scaffold(
         topBar = { DetailsTopBar(onBackClick = onBackClick, onFavoriteClick = { }) }
     ) { innerPadding ->
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = Dimens.Spacing.Medium)
-                .verticalScroll(rememberScrollState())
-        ) {
-            ProductImage(
-                imageUrl = "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
-                title = "Backpack"
-            )
+        when (state) {
+            is DetailState.Loading -> {
+                CircularProgressIndicator()
+            }
 
-            HorizontalDivider(modifier = Modifier.padding(top = Dimens.Spacing.Small))
+            is DetailState.Success -> {
+                val product = (state as DetailState.Success).product
 
-            ProductHeader(
-                category = "Men's Clothing",
-                title = "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
-                rating = 3.9,
-                reviewCount = 120
-            )
+                Column(
+                    modifier = modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(horizontal = Dimens.Spacing.Medium)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    ProductImage(
+                        imageUrl = product.image,
+                        title = product.title
+                    )
 
-            HorizontalDivider(modifier = Modifier.padding(top = Dimens.Spacing.Small))
+                    HorizontalDivider(modifier = Modifier.padding(top = Dimens.Spacing.Small))
 
-            PriceSection(price = 19.99)
+                    ProductHeader(
+                        category = product.category,
+                        title = product.title,
+                        rating = product.rating.rate,
+                        reviewCount = product.rating.count
+                    )
 
-            HorizontalDivider(modifier = Modifier.padding(top = Dimens.Spacing.Small))
+                    HorizontalDivider(modifier = Modifier.padding(top = Dimens.Spacing.Small))
 
-            DescriptionSection(description = "Your perfect pack for everyday use and walks in the forest. Stash your laptop up to 15 inches in the padded sleeve, your everyday essentials in the main compartment, and your smaller items in the front pocket.")
+                    PriceSection(price = product.price)
 
+                    HorizontalDivider(modifier = Modifier.padding(top = Dimens.Spacing.Small))
+
+                    DescriptionSection(description = product.description)
+
+                }
+            }
+
+            is DetailState.Error -> {
+                ErrorView(
+                    message = (state as DetailState.Error).message,
+                    onRetry = viewModel::retry
+                )
+            }
         }
     }
 }
