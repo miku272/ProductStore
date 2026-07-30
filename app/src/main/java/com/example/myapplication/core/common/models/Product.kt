@@ -1,4 +1,4 @@
-package com.example.myapplication.features.products.domain.models
+package com.example.myapplication.core.common.models
 
 data class Product(
     val id: Int,

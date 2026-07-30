@@ -1,4 +1,4 @@
-package com.example.myapplication.features.products.data.entities
+package com.example.myapplication.core.common.entities
 
 import kotlinx.serialization.Serializable
 

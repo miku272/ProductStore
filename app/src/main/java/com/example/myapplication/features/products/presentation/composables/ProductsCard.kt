@@ -1,7 +1,5 @@
 package com.example.myapplication.features.products.presentation.composables
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,21 +19,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
-import coil3.request.crossfade
 import com.example.myapplication.core.common.CurrencyFormatter
 import com.example.myapplication.core.composables.NetworkImage
 import com.example.myapplication.core.designsystem.AppElevation
 import com.example.myapplication.core.designsystem.AppShapes
 import com.example.myapplication.core.designsystem.Dimens
-import com.example.myapplication.features.products.domain.models.Product
-import com.example.myapplication.features.products.domain.models.Rating
+import com.example.myapplication.core.common.models.Product
+import com.example.myapplication.core.common.models.Rating
 
 @Composable
 fun ProductsCard(

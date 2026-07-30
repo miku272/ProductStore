@@ -5,7 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.example.myapplication.features.details.presentation.screens.DetailsScreen
+import com.example.myapplication.features.details.presentation.DetailsScreen
 import com.example.myapplication.features.favorites.presentation.screens.FavoritesScreen
 import com.example.myapplication.features.products.presentation.ProductsScreen
 import com.example.myapplication.features.settings.presentation.screens.SettingsScreen
@@ -28,7 +28,12 @@ fun AppNavHost(
         composable<Details> { backStackEntry ->
             val args = backStackEntry.toRoute<Details>()
 
-            DetailsScreen(productId = args.productId)
+            DetailsScreen(
+                productId = args.productId,
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
         }
         composable<Favorites> {
             FavoritesScreen()

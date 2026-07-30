@@ -1,6 +1,6 @@
 package com.example.myapplication.features.products.presentation.state
 
-import com.example.myapplication.features.products.domain.models.Product
+import com.example.myapplication.core.common.models.Product
 
 sealed interface ProductUiState {
 
