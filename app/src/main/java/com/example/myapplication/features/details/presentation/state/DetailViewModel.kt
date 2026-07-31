@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.example.myapplication.core.common.domain.models.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
