@@ -27,8 +27,8 @@ import com.example.myapplication.core.composables.NetworkImage
 import com.example.myapplication.core.designsystem.AppElevation
 import com.example.myapplication.core.designsystem.AppShapes
 import com.example.myapplication.core.designsystem.Dimens
-import com.example.myapplication.core.common.models.Product
-import com.example.myapplication.core.common.models.Rating
+import com.example.myapplication.core.common.domain.models.Product
+import com.example.myapplication.core.common.domain.models.Rating
 
 @Composable
 fun ProductsCard(

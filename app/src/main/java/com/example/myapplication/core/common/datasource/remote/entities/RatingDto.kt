@@ -1,4 +1,4 @@
-package com.example.myapplication.core.common.entities
+package com.example.myapplication.core.common.datasource.remote.entities
 
 import kotlinx.serialization.Serializable
 

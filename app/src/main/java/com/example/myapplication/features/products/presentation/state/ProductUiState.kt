@@ -1,6 +1,6 @@
 package com.example.myapplication.features.products.presentation.state
 
-import com.example.myapplication.core.common.models.Product
+import com.example.myapplication.core.common.domain.models.Product
 
 data class ProductUiState(
     val products: List<Product> = emptyList(),

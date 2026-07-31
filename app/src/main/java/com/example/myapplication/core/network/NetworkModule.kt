@@ -1,6 +1,6 @@
 package com.example.myapplication.core.network
 
-import com.example.myapplication.core.common.datasource.ProductApi
+import com.example.myapplication.core.common.datasource.remote.ProductApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

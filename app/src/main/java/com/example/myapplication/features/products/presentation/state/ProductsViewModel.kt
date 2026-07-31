@@ -3,7 +3,7 @@ package com.example.myapplication.features.products.presentation.state
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.core.common.Result
-import com.example.myapplication.core.common.models.Product
+import com.example.myapplication.core.common.domain.models.Product
 import com.example.myapplication.core.common.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject

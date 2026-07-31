@@ -1,6 +1,6 @@
-package com.example.myapplication.core.common.datasource
+package com.example.myapplication.core.common.datasource.remote
 
-import com.example.myapplication.core.common.entities.ProductDto
+import com.example.myapplication.core.common.datasource.remote.entities.ProductDto
 import retrofit2.http.GET
 import retrofit2.http.Path
 

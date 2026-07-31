@@ -1,6 +1,6 @@
 package com.example.myapplication.features.details.presentation.state
 
-import com.example.myapplication.core.common.models.Product
+import com.example.myapplication.core.common.domain.models.Product
 
 data class DetailUiState(
     val product: Product? = null,

@@ -1,8 +1,8 @@
-package com.example.myapplication.core.common.mapper
+package com.example.myapplication.core.common.datasource.remote.mapper
 
-import com.example.myapplication.core.common.entities.ProductDto
-import com.example.myapplication.core.common.models.Product
-import com.example.myapplication.core.common.models.Rating
+import com.example.myapplication.core.common.datasource.remote.entities.ProductDto
+import com.example.myapplication.core.common.domain.models.Product
+import com.example.myapplication.core.common.domain.models.Rating
 
 fun ProductDto.toDomain(): Product {
     return Product(
