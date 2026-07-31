@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.example.myapplication.core.common.Result
+import com.example.myapplication.core.common.models.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 @HiltViewModel
@@ -20,42 +21,115 @@ class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val productId = savedStateHandle.toRoute<Details>().productId
-    private val _uiState = MutableStateFlow<DetailState>(DetailState.Loading)
+    private val _uiState = MutableStateFlow(DetailUiState())
     val uiState = _uiState.asStateFlow()
 
     init {
-        loadProduct()
+        initialLoad()
     }
 
-    private fun loadProduct() {
+    fun refresh() {
+        refreshProduct()
+    }
+
+    private fun initialLoad() {
+
         viewModelScope.launch {
-            _uiState.update {
-                DetailState.Loading
+
+            showInitialLoading()
+
+            fetchProduct()
+
+        }
+
+    }
+
+    private fun refreshProduct() {
+
+        viewModelScope.launch {
+
+            showRefreshing()
+
+            fetchProduct()
+
+        }
+
+    }
+
+    private suspend fun fetchProduct() {
+
+        val result = productRepository
+            .getProduct(productId)
+
+        when (result) {
+            is Result.Loading -> {}
+
+            is Result.Success -> {
+                showProduct(result.data)
             }
 
-            when (val result = productRepository.getProduct(productId)) {
-                is Result.Loading -> {
-                    _uiState.update {
-                        DetailState.Loading
-                    }
-                }
-
-                is Result.Success -> {
-                    _uiState.update {
-                        DetailState.Success(result.data)
-                    }
-                }
-
-                is Result.Error -> {
-                    _uiState.update {
-                        DetailState.Error(message = result.message ?: "Unknown error")
-                    }
-                }
+            is Result.Error -> {
+                showError()
             }
         }
+
     }
 
-    fun retry() {
-        loadProduct()
+    private fun showInitialLoading() {
+
+        _uiState.update {
+
+            it.copy(
+                isInitialLoading = true,
+                isRefreshing = false,
+                error = null
+            )
+
+        }
+
+    }
+
+    private fun showRefreshing() {
+
+        _uiState.update {
+
+            it.copy(
+                isRefreshing = true,
+                error = null
+            )
+
+        }
+
+    }
+
+    private fun showProduct(
+        product: Product
+    ) {
+
+        _uiState.update {
+
+            it.copy(
+                product = product,
+                isInitialLoading = false,
+                isRefreshing = false,
+                error = null
+            )
+
+        }
+
+    }
+
+    private fun showError() {
+
+        _uiState.update {
+
+            it.copy(
+                isInitialLoading = false,
+                isRefreshing = false,
+                error = "Something went wrong."
+            )
+
+        }
+
     }
 }

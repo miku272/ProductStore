@@ -21,7 +21,6 @@ import com.example.myapplication.features.details.presentation.composables.Detai
 import com.example.myapplication.features.details.presentation.composables.PriceSection
 import com.example.myapplication.features.details.presentation.composables.ProductHeader
 import com.example.myapplication.features.details.presentation.composables.ProductImage
-import com.example.myapplication.features.details.presentation.state.DetailState
 import com.example.myapplication.features.details.presentation.state.DetailViewModel
 
 @Composable
@@ -35,13 +34,20 @@ fun DetailsScreen(
     Scaffold(
         topBar = { DetailsTopBar(onBackClick = onBackClick, onFavoriteClick = { }) }
     ) { innerPadding ->
-        when (state) {
-            is DetailState.Loading -> {
+        when {
+            state.isInitialLoading -> {
                 CircularProgressIndicator()
             }
 
-            is DetailState.Success -> {
-                val product = (state as DetailState.Success).product
+            state.error != null && state.product == null -> {
+                ErrorView(
+                    message = state.error!!,
+                    onRetry = viewModel::refresh
+                )
+            }
+
+            state.product != null -> {
+                val product = state.product!!
 
                 Column(
                     modifier = modifier
@@ -73,13 +79,6 @@ fun DetailsScreen(
                     DescriptionSection(description = product.description)
 
                 }
-            }
-
-            is DetailState.Error -> {
-                ErrorView(
-                    message = (state as DetailState.Error).message,
-                    onRetry = viewModel::retry
-                )
             }
         }
     }
