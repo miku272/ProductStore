@@ -4,132 +4,91 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.example.myapplication.core.common.datasource.repository.ProductRepositoryImpl
+import com.example.myapplication.core.common.domain.repository.ProductRepository
 import com.example.myapplication.core.navigation.Details
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import com.example.myapplication.core.common.Result
 import com.example.myapplication.core.common.domain.models.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val productRepositoryImpl: ProductRepositoryImpl,
+    private val repository: ProductRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val productId = savedStateHandle.toRoute<Details>().productId
-    private val _uiState = MutableStateFlow(DetailUiState())
+
+    private val productId =
+        savedStateHandle
+            .toRoute<Details>()
+            .productId
+
+    private val _uiState = MutableStateFlow(
+        DetailUiState()
+    )
     val uiState = _uiState.asStateFlow()
 
     init {
-        initialLoad()
+        observeProduct()
+        refresh()
     }
 
     fun refresh() {
-        refreshProduct()
-    }
-
-    private fun initialLoad() {
-
         viewModelScope.launch {
-
-            showInitialLoading()
-
-            fetchProduct()
-
-        }
-
-    }
-
-    private fun refreshProduct() {
-
-        viewModelScope.launch {
-
             showRefreshing()
-
-            fetchProduct()
-
+            try {
+                repository.refreshProduct(productId)
+            } catch (throwable: Throwable) {
+                showError(throwable)
+            }
         }
-
     }
 
-    private suspend fun fetchProduct() {
-
-//        val result = productRepositoryImpl
-//            .getProduct(productId)
-//
-//        when (result) {
-//            is Result.Loading -> {}
-//
-//            is Result.Success -> {
-//                showProduct(result.data)
-//            }
-//
-//            is Result.Error -> {
-//                showError()
-//            }
-//        }
-
-    }
-
-    private fun showInitialLoading() {
-
-        _uiState.update {
-
-            it.copy(
-                isInitialLoading = true,
-                isRefreshing = false,
-                error = null
-            )
-
+    private fun observeProduct() {
+        viewModelScope.launch {
+            repository
+                .observeProduct(productId)
+                .collect { product ->
+                    if (product != null) {
+                        showProduct(product)
+                    }
+                }
         }
-
     }
 
     private fun showRefreshing() {
-
         _uiState.update {
-
             it.copy(
                 isRefreshing = true,
                 error = null
             )
-
         }
-
     }
 
     private fun showProduct(
         product: Product
     ) {
-
         _uiState.update {
-
             it.copy(
                 product = product,
-                isInitialLoading = false,
                 isRefreshing = false,
                 error = null
             )
-
         }
-
     }
 
-    private fun showError() {
-
+    private fun showError(
+        throwable: Throwable
+    ) {
         _uiState.update {
-
             it.copy(
-                isInitialLoading = false,
                 isRefreshing = false,
-                error = "Something went wrong."
+                error = throwable.message
+                    ?: "Something went wrong."
             )
-
         }
-
     }
 }

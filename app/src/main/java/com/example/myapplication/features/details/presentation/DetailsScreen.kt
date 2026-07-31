@@ -35,11 +35,11 @@ fun DetailsScreen(
         topBar = { DetailsTopBar(onBackClick = onBackClick, onFavoriteClick = { }) }
     ) { innerPadding ->
         when {
-            state.isInitialLoading -> {
+            state.shouldShowLoading -> {
                 CircularProgressIndicator()
             }
 
-            state.error != null && state.product == null -> {
+            state.shouldShowError -> {
                 ErrorView(
                     message = state.error!!,
                     onRetry = viewModel::refresh

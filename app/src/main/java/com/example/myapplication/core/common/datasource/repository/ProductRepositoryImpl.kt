@@ -25,7 +25,7 @@ class ProductRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun ObserveProduct(id: Int): Flow<Product?> {
+    override fun observeProduct(id: Int): Flow<Product?> {
         return productDao
             .observeById(id)
             .map { it?.toDomain() }
