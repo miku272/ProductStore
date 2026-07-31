@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.example.myapplication.core.common.repository.ProductRepository
+import com.example.myapplication.core.common.datasource.repository.ProductRepositoryImpl
 import com.example.myapplication.core.navigation.Details
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +17,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val productRepository: ProductRepository,
+    private val productRepositoryImpl: ProductRepositoryImpl,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val productId = savedStateHandle.toRoute<Details>().productId
@@ -58,20 +58,20 @@ class DetailViewModel @Inject constructor(
 
     private suspend fun fetchProduct() {
 
-        val result = productRepository
-            .getProduct(productId)
-
-        when (result) {
-            is Result.Loading -> {}
-
-            is Result.Success -> {
-                showProduct(result.data)
-            }
-
-            is Result.Error -> {
-                showError()
-            }
-        }
+//        val result = productRepositoryImpl
+//            .getProduct(productId)
+//
+//        when (result) {
+//            is Result.Loading -> {}
+//
+//            is Result.Success -> {
+//                showProduct(result.data)
+//            }
+//
+//            is Result.Error -> {
+//                showError()
+//            }
+//        }
 
     }
 

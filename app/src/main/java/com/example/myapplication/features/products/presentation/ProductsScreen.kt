@@ -1,11 +1,8 @@
 package com.example.myapplication.features.products.presentation
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -19,10 +16,8 @@ import androidx.compose.runtime.getValue
 import com.example.myapplication.core.composables.EmptyView
 import com.example.myapplication.core.designsystem.Dimens
 import com.example.myapplication.core.composables.ErrorView
-import com.example.myapplication.features.products.presentation.composables.ProductsCard
 import com.example.myapplication.features.products.presentation.composables.ProductsList
 import com.example.myapplication.features.products.presentation.composables.ProductsTopBar
-import com.example.myapplication.features.products.presentation.state.ProductUiState
 
 @Composable
 fun ProductsScreen(
@@ -43,9 +38,9 @@ fun ProductsScreen(
 
         ) {
             when {
-                state.isInitialLoading -> CircularProgressIndicator()
+                state.shouldShowLoading -> CircularProgressIndicator()
 
-                state.error != null && state.products.isEmpty() -> {
+                state.shouldShowError -> {
                     ErrorView(
                         message = state.error!!,
                         onRetry = viewModel::refresh
@@ -59,7 +54,7 @@ fun ProductsScreen(
                         modifier = Modifier
                             .fillMaxSize()
                     ) {
-                        if (state.products.isEmpty()) {
+                        if (state.shouldShowEmpty) {
                             EmptyView(
                                 onAction = viewModel::refresh,
                                 modifier = Modifier.fillMaxSize()

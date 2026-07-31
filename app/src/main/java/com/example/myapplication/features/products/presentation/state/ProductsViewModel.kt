@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.core.common.Result
 import com.example.myapplication.core.common.domain.models.Product
-import com.example.myapplication.core.common.repository.ProductRepository
+import com.example.myapplication.core.common.datasource.repository.ProductRepositoryImpl
+import com.example.myapplication.core.common.domain.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,69 +15,66 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ProductsViewModel @Inject constructor(
-    private val productRepository: ProductRepository
+    private val repository: ProductRepository
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow<ProductUiState>(ProductUiState())
+
+    private val _uiState = MutableStateFlow(
+        ProductsUiState()
+    )
+
     val uiState = _uiState.asStateFlow()
 
     init {
-        initialLoad()
+        observeProducts()
+        refresh()
     }
 
     fun refresh() {
-        refreshProducts()
-    }
-
-    private fun initialLoad() {
-
-        viewModelScope.launch {
-
-            showInitialLoading()
-
-            fetchProducts()
-        }
-    }
-
-    private fun refreshProducts() {
 
         viewModelScope.launch {
 
             showRefreshing()
 
-            fetchProducts()
-        }
-    }
+            try {
 
-    private suspend fun fetchProducts() {
+                repository.refreshProducts()
 
-        val result = productRepository
-            .getProducts()
+            } catch (throwable: Throwable) {
 
-        when (result) {
-            is Result.Loading -> { }
+                showError(throwable)
 
-            is Result.Success -> {
-                showProducts(result.data)
             }
 
-            is Result.Error -> {
-                showError()
-            }
         }
 
     }
 
-    private fun showInitialLoading() {
+    private fun observeProducts() {
+
+        viewModelScope.launch {
+
+            repository
+                .observeProducts()
+                .collect(::showProducts)
+
+        }
+
+    }
+
+    private fun showProducts(
+        products: List<Product>
+    ) {
 
         _uiState.update {
 
             it.copy(
-                isInitialLoading = true,
+                products = products,
                 isRefreshing = false,
                 error = null
             )
 
         }
+
     }
 
     private fun showRefreshing() {
@@ -89,34 +87,22 @@ class ProductsViewModel @Inject constructor(
             )
 
         }
+
     }
 
-    private fun showProducts(
-        products: List<Product>
+    private fun showError(
+        throwable: Throwable
     ) {
 
         _uiState.update {
 
             it.copy(
-                products = products,
-                isInitialLoading = false,
                 isRefreshing = false,
-                error = null
+                error = throwable.message ?: "Something went wrong."
             )
 
         }
+
     }
 
-    private fun showError() {
-
-        _uiState.update {
-
-            it.copy(
-                isInitialLoading = false,
-                isRefreshing = false,
-                error = "Something went wrong."
-            )
-
-        }
-    }
 }
