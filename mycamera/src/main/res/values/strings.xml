@@ -1,3 +1,4 @@
 <resources>
     <string name="title_activity_my_camera">MyCameraActivity</string>
+    <string name="camera_screen_title">Camera Screen</string>
 </resources>

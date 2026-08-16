@@ -8,8 +8,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.R
 
 @Composable
 fun DetailsScreen(productId: Int) {
@@ -22,7 +24,7 @@ fun DetailsScreen(productId: Int) {
 
         ) {
             Text(
-                text = "Details Screen for product: $productId",
+                text = stringResource(R.string.details_screen_title, productId),
                 style = TextStyle(
                     fontSize = 24.sp
                 )

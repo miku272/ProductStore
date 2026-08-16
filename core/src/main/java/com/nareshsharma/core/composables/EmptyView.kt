@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,9 +26,9 @@ import com.nareshsharma.core.designsystem.Dimens
 @Composable
 fun EmptyView(
     modifier: Modifier = Modifier,
-    title: String = "No products found",
-    message: String = "Try adjusting your search or refresh your screen",
-    buttonText: String = "Refresh",
+    title: String = stringResource(R.string.empty_view_title),
+    message: String = stringResource(R.string.empty_view_message),
+    buttonText: String = stringResource(R.string.empty_view_button),
     onAction: () -> Unit,
 ) {
     Box(

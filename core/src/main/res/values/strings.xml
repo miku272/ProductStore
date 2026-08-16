@@ -1,0 +1,8 @@
+<resources>
+    <string name="empty_view_title">No products found</string>
+    <string name="empty_view_message">Try adjusting your search or refresh your screen</string>
+    <string name="empty_view_button">Refresh</string>
+    <string name="error_view_title">Oops!</string>
+    <string name="error_view_button">Retry</string>
+    <string name="error_view_default_message">We couldn\'t load the products</string>
+</resources>

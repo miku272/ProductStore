@@ -12,6 +12,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.example.myapplication.R
 import me.nareshsharma.mycamera.MyCameraActivity
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -21,7 +23,7 @@ fun ProductsTopBar(modifier: Modifier = Modifier) {
 
     TopAppBar(
         modifier = modifier,
-        title = { Text("Products") },
+        title = { Text(stringResource(R.string.products_title)) },
         actions = {
             IconButton(onClick = {
                 val intent = Intent(context, MyCameraActivity::class.java)
@@ -29,7 +31,7 @@ fun ProductsTopBar(modifier: Modifier = Modifier) {
             }) {
                 Icon(
                     imageVector = Icons.Default.Search,
-                    contentDescription = "Search"
+                    contentDescription = stringResource(R.string.search_content_description)
                 )
             }
 
@@ -39,7 +41,7 @@ fun ProductsTopBar(modifier: Modifier = Modifier) {
             }) {
                 Icon(
                     imageVector = Icons.Default.FavoriteBorder,
-                    contentDescription = "Favorites"
+                    contentDescription = stringResource(R.string.favorites_content_description)
                 )
             }
         }
