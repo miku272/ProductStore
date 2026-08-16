@@ -15,8 +15,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.myapplication.features.products.presentation.state.ProductsViewModel
 import androidx.compose.runtime.getValue
-import com.example.myapplication.core.designsystem.Dimens
-import com.example.myapplication.core.composables.ErrorView
+import com.nareshsharma.core.designsystem.Dimens
+import com.nareshsharma.core.composables.ErrorView
 import com.example.myapplication.features.products.presentation.composables.ProductsCard
 import com.example.myapplication.features.products.presentation.composables.ProductsTopBar
 import com.example.myapplication.features.products.presentation.state.ProductUiState

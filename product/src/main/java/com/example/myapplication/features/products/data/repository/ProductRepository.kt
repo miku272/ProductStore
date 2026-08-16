@@ -4,7 +4,7 @@ import com.example.myapplication.features.products.data.datasource.ProductApi
 import com.example.myapplication.features.products.data.mapper.toDomain
 import com.example.myapplication.features.products.domain.models.Product
 import jakarta.inject.Inject
-import com.example.myapplication.core.common.Result
+import com.nareshsharma.core.common.Result
 
 class ProductRepository @Inject constructor(
     private val productApi: ProductApi
